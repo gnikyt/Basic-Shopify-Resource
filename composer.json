@@ -23,5 +23,10 @@
     "autoload": {
       "psr-4": { "OhMyBrew\\BasicShopifyResource\\" : "src/OhMyBrew/BasicShopifyResource" }
     },
+    "autoload-dev": {
+      "psr-4": {
+        "OhMyBrew\\BasicShopifyResource\\Test\\": "test"
+      }
+    },
     "config": { "bin-dir": "bin" }
   }
