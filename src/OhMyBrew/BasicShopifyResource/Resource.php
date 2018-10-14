@@ -12,42 +12,42 @@ abstract class Resource
     /**
      * The properties of the resource, such as ID, title, etc.
      *
-     * @array
+     * @var array
      */
     protected $properties = [];
 
     /**
      * The modified properties of the resource.
      *
-     * @array
+     * @var array
      */
     protected $mutatedProperties = [];
 
     /**
      * The resource's path part.
      *
-     * @string
+     * @var string
      */
     protected $resourcePath = null;
 
     /**
      * The resource's name, such as "product"
      *
-     * @string
+     * @var string
      */
     protected $resourceName = null;
 
     /**
      * The resource's plural name, such as "products"
      *
-     * @string
+     * @var string
      */
     protected $resourceNamePlural = null;
 
     /**
      * The resource's primary key.
      *
-     * @string
+     * @var string
      */
     protected $resourcePk = null;
 
