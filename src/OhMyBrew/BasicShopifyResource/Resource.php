@@ -108,8 +108,14 @@ abstract class Resource
         $path = ['/admin'];
         if ($through) {
             // If we're going through, form this part first
-            $path[] = $through->resourcePath;
-            $path[] = $through->{$through->getPk()};
+            if ($through instanceof Resource) {
+                // Build from existing resource
+                $path[] = $through->resourcePath;
+                $path[] = $through->{$through->getPk()};
+            } else {
+                // Build from string, like "products/1234"
+                $path[] = $through;
+            }
         }
         $path[] = $resourcePath;
 

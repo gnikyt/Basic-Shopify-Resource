@@ -95,6 +95,7 @@ class ResourceTest extends TestCase
         $connection = $this->createConnection('base/product_find');
         $product = $this->invokeMethod(Product::class, 'find', [632910392]);
 
+        // Find through resource
         $connection = $this->createConnection('base/variant_find_through');
         $variant = $this->invokeMethod(Variant::class, 'findThrough', [808950810, $product]);
 
@@ -103,6 +104,15 @@ class ResourceTest extends TestCase
             parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
         );
         $this->assertInstanceOf(Variant::class, $variant);
+
+        // Find through string
+        $connection = $this->createConnection('base/variant_find_through');
+        $variant = $this->invokeMethod(Variant::class, 'findThrough', [808950810, 'products/632910392']);
+
+        $this->assertEquals(
+            '/admin/products/632910392/variants/808950810.json',
+            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+        );
     }
 
     public function testAll()
