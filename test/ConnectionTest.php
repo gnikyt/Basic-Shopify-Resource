@@ -16,6 +16,25 @@ class ConnectionTest extends TestCase
         Connection::get();
     }
 
+
+    /**
+     * @expectedException Exception
+     */
+    public function testClearsConnection()
+    {
+        Connection::set(
+            true,
+            'example-shop.myshopify.com',
+            [
+                'key' => '9798928b7bac29a732e3c1f3646732df2',
+                'password' => 'dd69e76588e9008b0b8ae1dd7a7b7b59',
+            ]
+        );
+        Connection::clear();
+
+        Connection::get();
+    }
+
     public function testCanSetPrivateConnection()
     {
         Connection::set(
@@ -28,6 +47,8 @@ class ConnectionTest extends TestCase
         );
 
         $this->assertNotNull(Connection::get());
+
+        Connection::clear();
     }
 
     public function testCanSetPublicConnection()
@@ -43,6 +64,8 @@ class ConnectionTest extends TestCase
         );
 
         $this->assertNotNull(Connection::get());
+
+        Connection::clear();
     }
 
     /**
@@ -52,6 +75,20 @@ class ConnectionTest extends TestCase
     {
         Connection::set(
             false,
+            'example-shop.myshopify.com',
+            [
+                'key' => '9798928b7bac29a732e3c1f3646732df2',
+            ]
+        );
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testThrowsExceptionForMissingPublicApiDetails()
+    {
+        Connection::set(
+            true,
             'example-shop.myshopify.com',
             [
                 'key' => '9798928b7bac29a732e3c1f3646732df2',

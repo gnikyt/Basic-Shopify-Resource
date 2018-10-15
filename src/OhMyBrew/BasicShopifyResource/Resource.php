@@ -303,7 +303,7 @@ abstract class Resource
      */
     public function isNew()
     {
-        return !isset($this->{$this->getPk()});
+        return !isset($this->properties[$this->getPk()]);
     }
 
     /**
@@ -385,7 +385,7 @@ abstract class Resource
             return $this->properties[$property];
         } elseif (array_key_exists($property, $this->mutatedProperties)) {
             // Its mutated, get the mutated property version
-            return $this->mutatedProperties[$property]; 
+            return $this->mutatedProperties[$property];
         } elseif (array_key_exists($property, $this->properties)) {
             // Its not mutated, get the property
             return $this->properties[$property];
@@ -427,7 +427,7 @@ abstract class Resource
      */
     public function resetProperties()
     {
-        $this->modifiedProperties = [];
+        $this->mutatedProperties = [];
     }
 
     /**

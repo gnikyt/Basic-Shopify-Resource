@@ -20,16 +20,21 @@ class Connection
     /**
      * Creates the connection.
      *
-     * @param boolean $private Public or private API calls.
-     * @param string  $shop    The shop to target.
-     * @param array  $apiData  API details required.
+     * @param boolean     $private Public or private API calls.
+     * @param string      $shop    The shop to target.
+     * @param array       $apiData API details required.
+     * @param object|null $client  The Guzzle client to use.
      *
      * @return BasicShopifyAPI
      */
-    public static function set(bool $private, string $shop, array $apiData)
+    public static function set(bool $private, string $shop, array $apiData, $client = null)
     {
         $api = new BasicShopifyAPI($private);
         $api->setShop($shop);
+
+        if ($client) {
+            $api->setClient($client);
+        }
 
         if ($private) {
             if (!isset($apiData['key']) || !isset($apiData['password'])) {
@@ -64,5 +69,15 @@ class Connection
         }
 
         return $connection;
+    }
+
+    /**
+     * Clears the connection saved.
+     *
+     * @return void
+     */
+    public static function clear()
+    {
+        self::$connection = null;
     }
 }

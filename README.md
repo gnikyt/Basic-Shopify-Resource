@@ -2,7 +2,7 @@
 
 This library is a simple wrapper for the Basic Shopify API to interact with the Shopify resources in a more friendly manner.
 
-**THIS IS IN DEVELOPMENT** do not use. Library is changing, incomplete, and not yet unit tested.
+**THIS IS IN DEVELOPMENT** do not use, unit tests are on-going.
 
 ## Examples:
 
@@ -18,7 +18,7 @@ echo "Product: {$p->title}";
 $p->title = 'New Title';
 $p->save();
 
-echo $p->variants->first()->id;
+echo $p->variants->first()->id; // Lazy loads the variants if not existing
 
 echo Product::all()->count();
 
