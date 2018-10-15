@@ -5,28 +5,31 @@ namespace OhMyBrew\BasicShopifyResource\Models;
 use OhMyBrew\BasicShopifyResource\Resource;
 use OhMyBrew\BasicShopifyResource\Models\Product;
 
-class Variant extends Resource
+/**
+ * Image API
+ */
+class Image extends Resource
 {
     /**
      * The resource path part.
      *
      * @var string
      */
-    protected $resourcePath = 'variants';
+    protected $resourcePath = 'images';
 
     /**
      * The resource name.
      *
      * @var string
      */
-    protected $resourceName = 'variant';
+    protected $resourceName = 'image';
 
     /**
      * The resource name (plural).
      *
      * @var string
      */
-    protected $resourceNamePlural = 'variants';
+    protected $resourceNamePlural = 'images';
 
     /**
      * The resource's relationships.
@@ -35,6 +38,5 @@ class Variant extends Resource
      */
     protected $relationships = [
         'product' => [self::HAS_ONE, Product::class],
-        'image'   => [self::HAS_ONE, Image::class],
     ];
 }

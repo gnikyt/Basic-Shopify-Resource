@@ -94,7 +94,7 @@ abstract class Resource
      * @param array       $params     Additional parameters to pass with the request.
      * @param object|null $through    To form this request through another resource.
      *
-     * @return Collection|object
+     * @return Collection|object|null
      */
     protected static function request(string $type, $resourceId = null, array $params = [], $through = null)
     {
@@ -126,13 +126,17 @@ abstract class Resource
             ->{$resourceId ? $resourceName : $resourceNamePlural}
         ;
 
-        if ($resourceId) {
-            // If singular, build a single model
-            return self::buildResource($resource, $response);
+        if ($type !== 'DELETE') {
+            if ($resourceId) {
+                // If singular, build a single model
+                return self::buildResource($resource, $response);
+            }
+
+            // Multiple, build many models
+            return self::buildResourceCollection($resource, $response);
         }
 
-        // Multiple, build many models
-        return self::buildResourceCollection($resource, $response);
+        return null;
     }
 
     /**
