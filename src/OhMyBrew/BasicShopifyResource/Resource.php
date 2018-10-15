@@ -2,6 +2,7 @@
 
 namespace OhMyBrew\BasicShopifyResource;
 
+use Exception;
 use Tightenco\Collect\Support\Collection;
 
 /**
@@ -403,6 +404,40 @@ abstract class Resource
     }
 
     /**
+     * Refreshes the properties with a new set (usually after a save).
+     *
+     * @param array $properties The properties to set
+     *
+     * @return void
+     */
+    protected function refreshProperties(array $properties)
+    {
+        $this->properties = $properties;
+    }
+
+    /**
+     * Resets the mutated properties (usually after a save).
+     *
+     * @return void
+     */
+    public function resetProperties()
+    {
+        $this->mutatedProperties = [];
+    }
+
+    /**
+     * Forcefully get the original property even if its mutated.
+     *
+     * @param string $property The property to get.
+     *
+     * @return mixed
+     */
+    public function originalProperty($property)
+    {
+        return $this->properties[$property];
+    }
+
+    /**
      * Checks if a property of a record is defined as a relationship.
      * Returns relationship if exists.
      *
@@ -487,40 +522,6 @@ abstract class Resource
             }
         }
 
-        return $this->properties[$property];
-    }
-
-    /**
-     * Refreshes the properties with a new set (usually after a save).
-     *
-     * @param array $properties The properties to set
-     *
-     * @return void
-     */
-    protected function refreshProperties(array $properties)
-    {
-        $this->properties = $properties;
-    }
-
-    /**
-     * Resets the mutated properties (usually after a save).
-     *
-     * @return void
-     */
-    public function resetProperties()
-    {
-        $this->mutatedProperties = [];
-    }
-
-    /**
-     * Forcefully get the original property even if its mutated.
-     *
-     * @param string $property The property to get.
-     *
-     * @return mixed
-     */
-    public function originalProperty($property)
-    {
         return $this->properties[$property];
     }
 }

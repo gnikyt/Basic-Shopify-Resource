@@ -1,5 +1,10 @@
 # Basic Shopify Resource
 
+[![Build Status](https://travis-ci.org/ohmybrew/Basic-Shopify-Resource.svg?branch=master)](http://travis-ci.org/ohmybrew/Basic-Shopify-Resource)
+[![Coverage Status](https://coveralls.io/repos/github/ohmybrew/Basic-Shopify-Resource/badge.svg?branch=master)](https://coveralls.io/github/ohmybrew/Basic-Shopify-Resource?branch=master)
+[![StyleCI](https://styleci.io/repos/153016975/shield?branch=master)](https://styleci.io/repos/153016975)
+[![License](https://poser.pugx.org/ohmybrew/basic-shopify-resource/license)](https://packagist.org/packages/ohmybrew/basic-shopify-resource)
+
 This library is a simple wrapper for the Basic Shopify API to interact with the Shopify resources in a more friendly manner.
 
 **THIS IS IN DEVELOPMENT** do not use, unit tests are on-going.
