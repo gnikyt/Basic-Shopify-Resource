@@ -5,6 +5,8 @@ namespace OhMyBrew\BasicShopifyResource\Models;
 use OhMyBrew\BasicShopifyResource\Resource;
 use OhMyBrew\BasicShopifyResource\Models\Variant;
 use OhMyBrew\BasicShopifyResource\Models\Image;
+use OhMyBrew\BasicShopifyResource\Models\Collect;
+use OhMyBrew\BasicShopifyResource\Models\CustomCollection;
 
 /**
  * Product API
@@ -33,12 +35,17 @@ class Product extends Resource
     protected $resourceNamePlural = 'products';
 
     /**
-     * The resource's relationships.
-     *
-     * @var array
+     * The constructor.
+     * 
+     * @return $this
      */
-    protected $relationships = [
-        'variants' => [self::HAS_MANY, Variant::class],
-        'images'   => [self::HAS_MANY, Image::class],
-    ];
+    public function __construct()
+    {
+        $this->relationships = [
+            'variants'    => [self::INCLUDES_MANY, Variant::class],
+            'images'      => [self::INCLUDES_MANY, Image::class],
+            'collections' => [self::HAS_MANY, CustomCollection::class, function () { return ['product_id' => $this->id]; }],
+            'collects'    => [self::HAS_MANY, Collect::class, function () { return ['product_id' => $this->id]; }],
+        ];
+    }
 }

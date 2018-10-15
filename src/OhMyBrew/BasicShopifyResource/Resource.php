@@ -9,8 +9,10 @@ use Tightenco\Collect\Support\Collection;
  */
 abstract class Resource
 {
-    const HAS_ONE = 0;
-    const HAS_MANY = 1;
+    const INCLUDES_ONE = 0;
+    const INCLUDES_MANY = 1;
+    const HAS_ONE = 3;
+    const HAS_MANY = 4;
 
     /**
      * The properties of the resource, such as ID, title, etc.
@@ -52,14 +54,14 @@ abstract class Resource
      *
      * @var string
      */
-    protected $resourcePk = null;
+    protected $resourcePk = 'id';
 
     /**
-     * The resource's relationships.
+     * The resource's relationships
      *
      * @var array
      */
-    protected $relationships = null;
+    protected $relationships = [];
 
     /**
      * Gets the API instance.
@@ -111,7 +113,7 @@ abstract class Resource
             if ($through instanceof Resource) {
                 // Build from existing resource
                 $path[] = $through->resourcePath;
-                $path[] = $through->{$through->getPk()};
+                $path[] = $through->{$through->resourcePk};
             } else {
                 // Build from string, like "products/1234"
                 $path[] = $through;
@@ -242,7 +244,8 @@ abstract class Resource
     }
 
     /**
-     * Relationship of hasOne.
+     * Relationship of includesOne.
+     * This resource includes a single nested resource.
      *
      * @param string       $resource The class name of the resource.
      * @param array        $params   Additional param to pass with the request.
@@ -250,12 +253,12 @@ abstract class Resource
      *
      * @return object
      */
-    public function hasOne($resource, array $params = [], $key = null)
+    public function includesOne($resource, array $params = [], $key = null)
     {
         // Create an instance of the resource
         $instance = new $resource();
         if (!$key) {
-            // If no key is entered, build one
+            // If no key is entered, build an assumed one
             $key = "{$instance->resourceName}_id";
         }
 
@@ -263,17 +266,53 @@ abstract class Resource
     }
 
     /**
-     * Relationship of hasMany.
+     * Relationship of includesMany.
+     * This resource includes many nested resources.
      *
      * @param string $resource The class name of the resource.
      * @param array  $params   Additional param to pass with the request.
      *
      * @return Collection
      */
-    public function hasMany($resource, array $params = [])
+    public function includesMany($resource, array $params = [])
     {
         $instance = new $resource();
+
         return $instance::allThrough($this, $params);
+    }
+
+    /**
+     * Relationship of hasMany.
+     * This resource has many resources through another resource.
+     *
+     * @param string $resource The class name of the resource.
+     * @param array  $params   Additional param to pass with the request.
+     *
+     * @return Collection
+     */
+    public function hasMany($resource, array $params)
+    {
+        // Create an instance of the resource
+        $instance = new $resource();
+
+        return $instance::all($params);
+    }
+
+    /**
+     * Relationship of hasOne.
+     * This resource has a single resource through another resource.
+     *
+     * @param string       $resource The class name of the resource.
+     * @param array        $params   Additional param to pass with the request.
+     *
+     * @return object
+     */
+    public function hasOne($resource, array $params)
+    {
+        // Create an instance of the resource
+        $instance = new $resource();
+
+        return $instance::all($params)->first();
     }
 
     /**
@@ -284,7 +323,7 @@ abstract class Resource
     public function save()
     {
         $type = $this->isNew() ? 'POST' : 'PUT';
-        $id = $this->isNew() ? null : $this->{$this->getPk()};
+        $id = $this->isNew() ? null : $this->{$this->resourcePk};
         $params = [$this->resourceName => $this->mutatedProperties];
 
         // Create the request to create or save the record, params will turn into
@@ -303,7 +342,7 @@ abstract class Resource
      */
     public function destroy()
     {
-        self::request('DELETE', $this->{$this->getPk()});
+        self::request('DELETE', $this->{$this->resourcePk});
     }
 
     /**
@@ -313,7 +352,7 @@ abstract class Resource
      */
     public function isNew()
     {
-        return !isset($this->properties[$this->getPk()]);
+        return !isset($this->properties[$this->resourcePk]);
     }
 
     /**
@@ -327,29 +366,6 @@ abstract class Resource
     }
 
     /**
-     * Gets the primary key for the resource.
-     *
-     * @return string
-     */
-    public function getPk()
-    {
-        // Default to ID
-        return $this->resourcePk ?? 'id';
-    }
-
-    /**
-     * Checks if a property of a record is defined as a relationship.
-     *
-     * @param string $property The property to search.
-     *
-     * @return boolean
-     */
-    protected function isRelationalProperty($property)
-    {
-        return isset($this->relationships[$property]);
-    }
-
-    /**
      * Magic getter to ensure we can only grab the record's properties.
      *
      * @param string $property The property name.
@@ -358,41 +374,9 @@ abstract class Resource
      */
     public function __get($property)
     {
-        if ($this->isRelationalProperty($property)) {
-            // Its a relationship property, see if we've already binded
-            if (isset($this->properties[$property]) && ($this->properties[$property] instanceof Resource || $this->properties[$property] instanceof Collection)) {
-                // Already binded, simply return the result
-                return $this->properties[$property];
-            }
-
-            // Get the relationship; 0 = type, 1 = class, 2 = params, 3 = linking key
-            $relationship = $this->relationships[$property];
-            $type = $relationship[0];
-            $class = $relationship[1];
-            $params = $relationship[2] ?? [];
-            $linking = $relationship[3] ?? null;
-
-            if ($type === self::HAS_MANY) {
-                // Has many
-                if (isset($this->properties[$property])) {
-                    // Data is present from initial resource call, simply bind it to the model
-                    $this->properties[$property] = self::buildResourceCollection($class, $this->properties[$property]);
-                } else {
-                    // No data is present, make an API call
-                    $this->properties[$property] = $this->hasMany($class, $params);
-                }
-            } elseif ($type === self::HAS_ONE) {
-                // Has one
-                if (isset($this->properties[$property])) {
-                    // Data is present from initial resource call, simply bind it to the model
-                    $this->properties[$property] = self::buildResource($class, $this->properties[$property]);
-                } else {
-                    // No data is present, make an API call
-                    $this->properties[$property] = $this->hasOne($class, $params, $linking);
-                }
-            }
-
-            return $this->properties[$property];
+        if ($this->getRelationalProperty($property)) {
+            // Is relational property, get the relationship
+            return $this->getRelationship($property);
         } elseif (array_key_exists($property, $this->mutatedProperties)) {
             // Its mutated, get the mutated property version
             return $this->mutatedProperties[$property];
@@ -416,6 +400,94 @@ abstract class Resource
     public function __set($property, $value)
     {
         $this->mutatedProperties[$property] = $value;
+    }
+
+    /**
+     * Checks if a property of a record is defined as a relationship.
+     * Returns relationship if exists.
+     *
+     * @param string $property The property to search.
+     *
+     * @return boolean|array
+     */
+    protected function getRelationalProperty($property)
+    {
+        $relationships = $this->relationships;
+        if (!isset($relationships[$property])) {
+            // Doesn't exist
+            return false;
+        }
+
+        // Exists
+        return $relationships[$property];
+    }
+
+    /**
+     * Parses the property and returns the relational results.
+     *
+     * @param string $property The property to use.
+     *
+     * @return null|Collection|object
+     */
+    protected function getRelationship($property)
+    {
+        // Determine if its a relational property
+        $relationship = $this->getRelationalProperty($property);
+        if (!$relationship) {
+            throw new Exception('Property is not defined as relational');
+        }
+
+        // Its a relationship property, see if we've already binded
+        if (isset($this->properties[$property]) && ($this->properties[$property] instanceof Resource || $this->properties[$property] instanceof Collection)) {
+            // Already binded, simply return the result
+            return $this->properties[$property];
+        }
+
+        // Get the relationship; 0 = type, 1 = class, 2 = params, 3 = linking key
+        $type = $relationship[0];
+        $class = $relationship[1];
+        $params = isset($relationship[2]) ? $relationship[2]() : [];
+        $linking = $relationship[3] ?? null;
+
+        switch ($type) {
+            // Includes many nested
+            case self::INCLUDES_MANY: {
+                if (isset($this->properties[$property])) {
+                    // Data is present from initial resource call, simply bind it to the model
+                    $this->properties[$property] = self::buildResourceCollection($class, $this->properties[$property]);
+                } else {
+                    // No data is present, make an API call
+                    $this->properties[$property] = $this->includesMany($class, $params);
+                }
+                break;
+            }
+
+            // Includes a single nested resource
+            case self::INCLUDES_ONE: {
+                if (isset($this->properties[$property])) {
+                    // Data is present from initial resource call, simply bind it to the model
+                    $this->properties[$property] = self::buildResource($class, $this->properties[$property]);
+                } else {
+                    // No data is present, make an API call
+                    $this->properties[$property] = $this->includesOne($class, $params, $linking);
+                }
+                break;
+            }
+
+            // Has many resources through
+            case self::HAS_MANY: {
+                $this->properties[$property] = $this->hasMany($class, $params);
+                break;
+            }
+
+            // Has a single resource through
+            case self::HAS_ONE: {
+                $this->properties[$property] = $this->hasOne($class, $params);
+                break;
+            }
+        }
+
+        return $this->properties[$property];
     }
 
     /**

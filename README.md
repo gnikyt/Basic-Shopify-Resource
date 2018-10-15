@@ -19,6 +19,9 @@ $p->title = 'New Title';
 $p->save();
 
 echo $p->variants->first()->id; // Lazy loads the variants if not existing
+print_r($p->variants->first()->product); // Gets product for variant
+print_r($p->collections->first()->collects); // Gets collects for the collection
+print_r($p->collects); // Gets collects for the product
 
 echo Product::all()->count();
 
