@@ -3,11 +3,9 @@
 namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Resource;
-use OhMyBrew\BasicShopifyResource\Models\Collection;
-use OhMyBrew\BasicShopifyResource\Models\Product;
 
 /**
- * Custom Collection API
+ * Custom Collection API.
  */
 class Collect extends Resource
 {

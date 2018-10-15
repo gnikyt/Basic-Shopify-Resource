@@ -2,14 +2,9 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test\Resource;
 
-
-use OhMyBrew\BasicShopifyAPI;
-use OhMyBrew\BasicShopifyResource\Test\TestCase;
-use OhMyBrew\BasicShopifyResource\Resource;
-use OhMyBrew\BasicShopifyResource\Connection;
 use OhMyBrew\BasicShopifyResource\Models\Product;
 use OhMyBrew\BasicShopifyResource\Models\Variant;
-use OhMyBrew\BasicShopifyResource\Models\Image;
+use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;
 
 class ResourceRelationsTest extends TestCase
@@ -70,7 +65,7 @@ class ResourceRelationsTest extends TestCase
         // Second call should not fire an API call since we now have the data
         $this->assertInstanceOf(Product::class, $variant->product);
     }
-    
+
     public function testHasManyRelationship()
     {
         $this->createConnection(['base/product_find', 'base/custom_collection_all']);

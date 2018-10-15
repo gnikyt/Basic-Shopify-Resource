@@ -2,9 +2,7 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test;
 
-use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use OhMyBrew\BasicShopifyResource\Connection;
-use OhMyBrew\BasicShopifyAPI;
 
 class ConnectionTest extends TestCase
 {
@@ -16,7 +14,6 @@ class ConnectionTest extends TestCase
         Connection::get();
     }
 
-
     /**
      * @expectedException Exception
      */
@@ -26,7 +23,7 @@ class ConnectionTest extends TestCase
             true,
             'example-shop.myshopify.com',
             [
-                'key' => '9798928b7bac29a732e3c1f3646732df2',
+                'key'      => '9798928b7bac29a732e3c1f3646732df2',
                 'password' => 'dd69e76588e9008b0b8ae1dd7a7b7b59',
             ]
         );
@@ -41,7 +38,7 @@ class ConnectionTest extends TestCase
             true,
             'example-shop.myshopify.com',
             [
-                'key' => '9798928b7bac29a732e3c1f3646732df2',
+                'key'      => '9798928b7bac29a732e3c1f3646732df2',
                 'password' => 'dd69e76588e9008b0b8ae1dd7a7b7b59',
             ]
         );
@@ -57,9 +54,9 @@ class ConnectionTest extends TestCase
             false,
             'example-shop.myshopify.com',
             [
-                'key' => '9798928b7bac29a732e3c1f3646732df2',
+                'key'    => '9798928b7bac29a732e3c1f3646732df2',
                 'secret' => 'dd69e76588e9008b0b8ae1dd7a7b7b59',
-                'token' => 'ee9398001ddeab7abbao29992001',
+                'token'  => 'ee9398001ddeab7abbao29992001',
             ]
         );
 

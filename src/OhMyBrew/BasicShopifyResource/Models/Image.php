@@ -3,10 +3,9 @@
 namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Resource;
-use OhMyBrew\BasicShopifyResource\Models\Product;
 
 /**
- * Image API
+ * Image API.
  */
 class Image extends Resource
 {

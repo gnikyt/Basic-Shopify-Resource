@@ -2,11 +2,11 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test;
 
-use ReflectionClass;
-use OhMyBrew\BasicShopifyResource\Connection;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
+use OhMyBrew\BasicShopifyResource\Connection;
+use ReflectionClass;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -40,7 +40,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             true,
             'example-shop.myshopify.com',
             [
-                'key' => '9798928b7bac29a732e3c1f3646732df2',
+                'key'      => '9798928b7bac29a732e3c1f3646732df2',
                 'password' => 'dd69e76588e9008b0b8ae1dd7a7b7b59',
             ],
             $fixtures ? $client : null
@@ -54,7 +54,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $class = new ReflectionClass($className);
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
-        
+
         return count($args) === 0 ? $method->invoke(new $className()) : $method->invokeArgs(new $className(), $args);
     }
 }

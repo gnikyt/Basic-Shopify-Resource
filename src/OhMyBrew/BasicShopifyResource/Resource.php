@@ -37,14 +37,14 @@ abstract class Resource
     protected $resourcePath = null;
 
     /**
-     * The resource's name, such as "product"
+     * The resource's name, such as "product".
      *
      * @var string
      */
     protected $resourceName = null;
 
     /**
-     * The resource's plural name, such as "products"
+     * The resource's plural name, such as "products".
      *
      * @var string
      */
@@ -58,7 +58,7 @@ abstract class Resource
     protected $resourcePk = 'id';
 
     /**
-     * The resource's relationships
+     * The resource's relationships.
      *
      * @var array
      */
@@ -111,7 +111,7 @@ abstract class Resource
         $path = ['/admin'];
         if ($through) {
             // If we're going through, form this part first
-            if ($through instanceof Resource) {
+            if ($through instanceof self) {
                 // Build from existing resource
                 $path[] = $through->resourcePath;
                 $path[] = $through->{$through->resourcePk};
@@ -132,8 +132,7 @@ abstract class Resource
         $response = self::getConnection()
             ->rest($type, $path, $params)
             ->body
-            ->{$resourceId ? $resourceName : $resourceNamePlural}
-        ;
+            ->{$resourceId ? $resourceName : $resourceNamePlural};
 
         if ($type !== 'DELETE') {
             if ($resourceId) {
@@ -144,8 +143,6 @@ abstract class Resource
             // Multiple, build many models
             return self::buildResourceCollection($resource, $response);
         }
-
-        return null;
     }
 
     /**
@@ -158,7 +155,7 @@ abstract class Resource
      */
     protected static function buildResource($resource, $data)
     {
-        if (!$resource instanceof Resource) {
+        if (!$resource instanceof self) {
             // Not yet initialized
             $resource = new $resource();
         }
@@ -248,9 +245,9 @@ abstract class Resource
      * Relationship of includesOne.
      * This resource includes a single nested resource.
      *
-     * @param string       $resource The class name of the resource.
-     * @param array        $params   Additional param to pass with the request.
-     * @param string|null  $key      The key to link.
+     * @param string      $resource The class name of the resource.
+     * @param array       $params   Additional param to pass with the request.
+     * @param string|null $key      The key to link.
      *
      * @return object
      */
@@ -303,8 +300,8 @@ abstract class Resource
      * Relationship of hasOne.
      * This resource has a single resource through another resource.
      *
-     * @param string       $resource The class name of the resource.
-     * @param array        $params   Additional param to pass with the request.
+     * @param string $resource The class name of the resource.
+     * @param array  $params   Additional param to pass with the request.
      *
      * @return object
      */
@@ -349,7 +346,7 @@ abstract class Resource
     /**
      * Determines if this is a new record or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function isNew()
     {
@@ -359,7 +356,7 @@ abstract class Resource
     /**
      * Determines if this is an existing record or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function isExisting()
     {
@@ -387,7 +384,6 @@ abstract class Resource
         }
 
         // Its not mutated or a property, kill
-        return null;
     }
 
     /**
@@ -443,7 +439,7 @@ abstract class Resource
      *
      * @param string $property The property to search.
      *
-     * @return boolean|array
+     * @return bool|array
      */
     protected function getRelationalProperty($property)
     {
@@ -473,7 +469,7 @@ abstract class Resource
         }
 
         // Its a relationship property, see if we've already binded
-        if (isset($this->properties[$property]) && ($this->properties[$property] instanceof Resource || $this->properties[$property] instanceof Collection)) {
+        if (isset($this->properties[$property]) && ($this->properties[$property] instanceof self || $this->properties[$property] instanceof Collection)) {
             // Already binded, simply return the result
             return $this->properties[$property];
         }
