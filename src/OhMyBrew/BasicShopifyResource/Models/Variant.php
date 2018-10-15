@@ -26,15 +26,14 @@ class Variant extends Resource
      *
      * @var string
      */
-    protected $resourceNamePlural = 'variant';
+    protected $resourceNamePlural = 'variants';
 
     /**
-     * Has one: product
+     * The resource's relationships.
      *
-     * @return Product
+     * @var array
      */
-    public function product()
-    {
-        return $this->hasOne(Product::class);
-    }
+    protected $relationships = [
+        'product' => [self::HAS_ONE, Product::class],
+    ];
 }

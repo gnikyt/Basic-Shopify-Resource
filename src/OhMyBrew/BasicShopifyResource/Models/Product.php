@@ -32,12 +32,11 @@ class Product extends Resource
     protected $resourceNamePlural = 'products';
 
     /**
-     * Has many: variants
+     * The resource's relationships.
      *
-     * @return \Tightenco\Collect\Support\Collection
+     * @var array
      */
-    public function variants()
-    {
-        return $this->hasMany(Variant::class); 
-    }
+    protected $relationships = [
+        'variants' => [self::HAS_MANY, Variant::class],
+    ];
 }

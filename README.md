@@ -18,7 +18,7 @@ echo "Product: {$p->title}";
 $p->title = 'New Title';
 $p->save();
 
-echo $p->variants()->first()->id;
+echo $p->variants->first()->id;
 
 echo Product::all()->count();
 

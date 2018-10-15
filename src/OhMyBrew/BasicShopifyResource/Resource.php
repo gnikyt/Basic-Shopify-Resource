@@ -9,6 +9,9 @@ use Tightenco\Collect\Support\Collection;
  */
 abstract class Resource
 {
+    const HAS_ONE = 0;
+    const HAS_MANY = 1;
+
     /**
      * The properties of the resource, such as ID, title, etc.
      *
@@ -50,6 +53,13 @@ abstract class Resource
      * @var string
      */
     protected $resourcePk = null;
+
+    /**
+     * The resource's relationships.
+     *
+     * @var array
+     */
+    protected $relationships = null;
 
     /**
      * Gets the API instance.
@@ -99,7 +109,7 @@ abstract class Resource
         if ($through) {
             // If we're going through, form this part first
             $path[] = $through->resourcePath;
-            $path[] = $through->id;
+            $path[] = $through->{$through->getPk()};
         }
         $path[] = $resourcePath;
 
@@ -122,30 +132,48 @@ abstract class Resource
         }
 
         // Multiple, build many models
-        $collection = new Collection();
-        foreach ($response as $object) {
-            $collection[] = self::buildResource($resource, $object);
-        }
-
-        return $collection;
+        return self::buildResourceCollection($resource, $response);
     }
 
     /**
      * Creates a model based on the response.
      *
      * @param object $resource The model.
-     * @param object $response The response of the request.
+     * @param object $data     The data for the model.
      *
      * @return object
      */
-    protected static function buildResource($resource, $response)
+    protected static function buildResource($resource, $data)
     {
+        if (!$resource instanceof Resource) {
+            // Not yet initialized
+            $resource = new $resource();
+        }
+
         // Loop the public properties of the response, add them to the properties of the model
-        foreach (get_object_vars($response) as $key => $value) {
-            $resource->properties[$key] = $value;
+        foreach (get_object_vars($data) as $property => $value) {
+            $resource->properties[$property] = $value;
         }
 
         return $resource;
+    }
+
+    /**
+     * Creates a collection of models based on the response.
+     *
+     * @param object $resource The model.
+     * @param object $data     The data for the model.
+     *
+     * @return Collection
+     */
+    protected static function buildResourceCollection($resource, $data)
+    {
+        $collection = new Collection();
+        foreach ($data as $object) {
+            $collection[] = self::buildResource($resource, $object);
+        }
+
+        return $collection;
     }
 
     /**
@@ -234,7 +262,7 @@ abstract class Resource
      */
     public function hasMany($resource, array $params = [])
     {
-        $instance = new $resource;
+        $instance = new $resource();
         return $instance::allThrough($this, $params);
     }
 
@@ -246,7 +274,7 @@ abstract class Resource
     public function save()
     {
         $type = $this->isNew() ? 'POST' : 'PUT';
-        $id = $this->isNew() ? null : $this->id;
+        $id = $this->isNew() ? null : $this->{$this->getPk()};
         $params = [$this->resourceName => $this->mutatedProperties];
 
         // Create the request to create or save the record, params will turn into
@@ -265,7 +293,7 @@ abstract class Resource
      */
     public function destroy()
     {
-        // ...
+        self::request('DELETE', $this->{$this->getPk()});
     }
 
     /**
@@ -275,7 +303,17 @@ abstract class Resource
      */
     public function isNew()
     {
-        return isset($this->{$this->getPk()});
+        return !isset($this->{$this->getPk()});
+    }
+
+    /**
+     * Determines if this is an existing record or not.
+     *
+     * @return boolean
+     */
+    public function isExisting()
+    {
+        return !$this->isNew();
     }
 
     /**
@@ -290,6 +328,18 @@ abstract class Resource
     }
 
     /**
+     * Checks if a property of a record is defined as a relationship.
+     *
+     * @param string $property The property to search.
+     *
+     * @return boolean
+     */
+    protected function isRelationalProperty($property)
+    {
+        return isset($this->relationships[$property]);
+    }
+
+    /**
      * Magic getter to ensure we can only grab the record's properties.
      *
      * @param string $property The property name.
@@ -298,10 +348,45 @@ abstract class Resource
      */
     public function __get($property)
     {
-        if (array_key_exists($property, $this->mutatedProperties)) {
+        if ($this->isRelationalProperty($property)) {
+            // Its a relationship property, see if we've already binded
+            if (isset($this->properties[$property]) && ($this->properties[$property] instanceof Resource || $this->properties[$property] instanceof Collection)) {
+                // Already binded, simply return the result
+                return $this->properties[$property];
+            }
+
+            // Get the relationship; 0 = type, 1 = class, 2 = params, 3 = linking key
+            $relationship = $this->relationships[$property];
+            $type = $relationship[0];
+            $class = $relationship[1];
+            $params = $relationship[2] ?? [];
+            $linking = $relationship[3] ?? null;
+
+            if ($type === self::HAS_MANY) {
+                // Has many
+                if (isset($this->properties[$property])) {
+                    // Data is present from initial resource call, simply bind it to the model
+                    $this->properties[$property] = self::buildResourceCollection($class, $this->properties[$property]);
+                } else {
+                    // No data is present, make an API call
+                    $this->properties[$property] = $this->hasMany($class, $params);
+                }
+            } elseif ($type === self::HAS_ONE) {
+                // Has one
+                if (isset($this->properties[$property])) {
+                    // Data is present from initial resource call, simply bind it to the model
+                    $this->properties[$property] = self::buildResource($class, $this->properties[$property]);
+                } else {
+                    // No data is present, make an API call
+                    $this->properties[$property] = $this->hasOne($class, $params, $linking);
+                }
+            }
+
+            return $this->properties[$property];
+        } elseif (array_key_exists($property, $this->mutatedProperties)) {
             // Its mutated, get the mutated property version
-            return $this->mutatedProperties[$property];
-        } else if (array_key_exists($property, $this->properties)) {
+            return $this->mutatedProperties[$property]; 
+        } elseif (array_key_exists($property, $this->properties)) {
             // Its not mutated, get the property
             return $this->properties[$property];
         }
