@@ -20,7 +20,7 @@ class Connection
     /**
      * Creates the connection.
      *
-     * @param boolean     $private Public or private API calls.
+     * @param bool        $private Public or private API calls.
      * @param string      $shop    The shop to target.
      * @param array       $apiData API details required.
      * @param object|null $client  The Guzzle client to use.

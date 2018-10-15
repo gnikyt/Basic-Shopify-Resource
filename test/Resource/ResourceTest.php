@@ -2,15 +2,10 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test\Resource;
 
-use ReflectionClass;
 use OhMyBrew\BasicShopifyAPI;
-use OhMyBrew\BasicShopifyResource\Test\TestCase;
-use OhMyBrew\BasicShopifyResource\Resource;
-use OhMyBrew\BasicShopifyResource\Connection;
 use OhMyBrew\BasicShopifyResource\Models\Product;
-use OhMyBrew\BasicShopifyResource\Models\Variant;
-use OhMyBrew\BasicShopifyResource\Models\Image;
-use Tightenco\Collect\Support\Collection;
+use OhMyBrew\BasicShopifyResource\Test\TestCase;
+use ReflectionClass;
 
 class ResourceTest extends TestCase
 {

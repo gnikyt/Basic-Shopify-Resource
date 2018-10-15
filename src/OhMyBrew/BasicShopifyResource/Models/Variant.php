@@ -3,8 +3,6 @@
 namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Resource;
-use OhMyBrew\BasicShopifyResource\Models\Product;
-use OhMyBrew\BasicShopifyResource\Models\Image;
 
 class Variant extends Resource
 {
@@ -31,13 +29,15 @@ class Variant extends Resource
 
     /**
      * The constructor.
-     * 
+     *
      * @return $this
      */
     public function __construct()
     {
         $this->relationships = [
-            'product' => [self::HAS_ONE, Product::class, function () { return ['product_id' => $this->product_id]; }],
+            'product' => [self::HAS_ONE, Product::class, function () {
+                return ['product_id' => $this->product_id];
+            }],
             'image'   => [self::HAS_ONE, Image::class],
         ];
     }
