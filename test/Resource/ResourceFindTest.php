@@ -17,7 +17,7 @@ class ResourceFindTest extends TestCase
 
         $this->assertEquals(
             '/admin/products/632910392.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
         $this->assertInstanceOf(Product::class, $product);
     }
@@ -33,7 +33,7 @@ class ResourceFindTest extends TestCase
 
         $this->assertEquals(
             '/admin/products/632910392/variants/808950810.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
         $this->assertInstanceOf(Variant::class, $variant);
 
@@ -42,7 +42,7 @@ class ResourceFindTest extends TestCase
 
         $this->assertEquals(
             '/admin/products/632910392/variants/808950810.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
     }
 
@@ -53,7 +53,7 @@ class ResourceFindTest extends TestCase
 
         $this->assertEquals(
             '/admin/products.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
         $this->assertInstanceOf(Collection::class, $products);
     }
@@ -66,7 +66,7 @@ class ResourceFindTest extends TestCase
 
         $this->assertEquals(
             '/admin/products/632910392/variants.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
         $this->assertInstanceOf(Collection::class, $variants);
     }

@@ -2,15 +2,16 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test;
 
+use ReflectionClass;
+use ReflectionProperty;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use OhMyBrew\BasicShopifyResource\Connection;
-use ReflectionClass;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
-    public function createResponse($fixture)
+    protected function createResponse($fixture)
     {
         return new Response(
             200,
@@ -49,6 +50,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return $fixtures ? ['client' => $client, 'mock' => $mock] : null;
     }
 
+    protected function getLastPathCalled($connection)
+    {
+        return parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH);
+    }
+
     protected function invokeMethod($className, $methodName, array $args = [])
     {
         $class = new ReflectionClass($className);
@@ -56,5 +62,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         return count($args) === 0 ? $method->invoke(new $className()) : $method->invokeArgs(new $className(), $args);
+    }
+
+    protected function getResourceProperties($resource)
+    {
+        $ref = new ReflectionClass($resource);
+        $propList = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
+
+        $returnProps = [];
+        foreach ($propList as $prop) {
+            $property = $ref->getProperty($prop->getName());
+            $property->setAccessible(true);
+
+            $returnProps[$prop->getName()] = $property->getValue($resource);
+        }
+
+        return (object) $returnProps;
     }
 }

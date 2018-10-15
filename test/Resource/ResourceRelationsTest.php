@@ -37,7 +37,7 @@ class ResourceRelationsTest extends TestCase
         $this->assertInstanceOf(Collection::class, $product->variants);
         $this->assertEquals(
             '/admin/products/632910392.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
 
         // Product with no variants in response, should make an API call to get them
@@ -46,7 +46,7 @@ class ResourceRelationsTest extends TestCase
         $this->assertInstanceOf(Collection::class, $product->variants);
         $this->assertEquals(
             '/admin/products/632910392/variants.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
     }
 
@@ -59,7 +59,7 @@ class ResourceRelationsTest extends TestCase
         $this->assertInstanceOf(Product::class, $variant->product);
         $this->assertEquals(
             '/admin/products.json',
-            parse_url($connection['mock']->getLastRequest()->getUri(), PHP_URL_PATH)
+            $this->getLastPathCalled($connection)
         );
 
         // Second call should not fire an API call since we now have the data
