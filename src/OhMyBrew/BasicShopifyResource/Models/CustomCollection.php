@@ -3,6 +3,7 @@
 namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
 
 /**
  * Custom Collection API.
@@ -38,9 +39,9 @@ class CustomCollection extends Resource
     public function __construct()
     {
         $this->relationships = [
-            'collects' => [self::HAS_MANY, Collect::class, function () {
+            'collects' => (new HasMany(Collect::class))->setParams(function () {
                 return ['collection_id' => $this->id];
-            }],
+            }),
         ];
     }
 }

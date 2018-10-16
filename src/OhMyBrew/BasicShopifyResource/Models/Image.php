@@ -3,6 +3,7 @@
 namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 
 /**
  * Image API.
@@ -31,11 +32,14 @@ class Image extends Resource
     protected $resourceNamePlural = 'images';
 
     /**
-     * The resource's relationships.
+     * The constructor.
      *
-     * @var array
+     * @return $this
      */
-    protected $relationships = [
-        'product' => [self::HAS_ONE, Product::class],
-    ];
+    public function __construct()
+    {
+        $this->relationships = [
+            'product' => new HasOne(Product::class),
+        ];
+    }
 }

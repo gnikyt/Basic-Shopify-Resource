@@ -3,6 +3,7 @@
 namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 
 class Variant extends Resource
 {
@@ -35,12 +36,12 @@ class Variant extends Resource
     public function __construct()
     {
         $this->relationships = [
-            'product' => [self::HAS_ONE, Product::class, function () {
+            'product' => (new HasOne(Product::class))->setParams(function () {
                 return ['product_id' => $this->product_id];
-            }],
-            'image'   => [self::HAS_ONE, Image::class, function () {
+            }),
+            /* Needs hasOneThrough .. 'image'   => [self::HAS_ONE, Image::class, function () {
                 return ['id' => $this->image_id];
-            }],
+            }],*/
         ];
     }
 }

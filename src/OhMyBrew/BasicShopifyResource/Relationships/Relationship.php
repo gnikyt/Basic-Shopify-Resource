@@ -68,6 +68,6 @@ abstract class Relationship
      */
     public function getParams()
     {
-        return is_callable($this->params) ? $this->params() : [];
+        return is_callable($this->params) ? call_user_func($this->params) : [];
     }
 }
