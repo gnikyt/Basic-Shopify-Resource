@@ -3,6 +3,8 @@
 namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
+use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
 
 /**
  * Product API.
@@ -38,14 +40,16 @@ class Product extends Resource
     public function __construct()
     {
         $this->relationships = [
-            'variants'    => [self::INCLUDES_MANY, Variant::class],
-            'images'      => [self::INCLUDES_MANY, Image::class],
-            'collections' => [self::HAS_MANY, CustomCollection::class, function () {
+            'variants'    => new IncludesMany(Variant::class),
+            'images'      => (new IncludesMany(Image::class))->setParams(function () {
                 return ['product_id' => $this->id];
-            }],
-            'collects'    => [self::HAS_MANY, Collect::class, function () {
+            }),
+            'collections' => (new HasMany(CustomCollection::class))->setParams(function () {
                 return ['product_id' => $this->id];
-            }],
+            }),
+            'collects'    => (new HasMany(Collect::class))->setParams(function () {
+                return ['product_id' => $this->id];
+            }),
         ];
     }
 }

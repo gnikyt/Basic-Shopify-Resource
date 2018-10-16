@@ -38,7 +38,9 @@ class Variant extends Resource
             'product' => [self::HAS_ONE, Product::class, function () {
                 return ['product_id' => $this->product_id];
             }],
-            'image'   => [self::HAS_ONE, Image::class],
+            'image'   => [self::HAS_ONE, Image::class, function () {
+                return ['id' => $this->image_id];
+            }],
         ];
     }
 }

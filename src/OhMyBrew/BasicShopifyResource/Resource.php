@@ -4,6 +4,10 @@ namespace OhMyBrew\BasicShopifyResource;
 
 use Exception;
 use Tightenco\Collect\Support\Collection;
+use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
+use OhMyBrew\BasicShopifyResource\Relationships\IncludesOne;
+use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
+use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 
 /**
  * Resource class which all models are based on.
@@ -34,21 +38,21 @@ abstract class Resource
      *
      * @var string
      */
-    protected $resourcePath = null;
+    protected $resourcePath;
 
     /**
      * The resource's name, such as "product".
      *
      * @var string
      */
-    protected $resourceName = null;
+    protected $resourceName;
 
     /**
      * The resource's plural name, such as "products".
      *
      * @var string
      */
-    protected $resourceNamePlural = null;
+    protected $resourceNamePlural;
 
     /**
      * The resource's primary key.
@@ -474,48 +478,34 @@ abstract class Resource
             return $this->properties[$property];
         }
 
-        // Get the relationship; 0 = type, 1 = class, 2 = params, 3 = linking key
-        $type = $relationship[0];
-        $class = $relationship[1];
-        $params = isset($relationship[2]) ? $relationship[2]() : [];
-        $linking = $relationship[3] ?? null;
+        // Get the relationship type, resource class, and params (if any)
+        $resource = $relationship->getResource();
+        $params = $relationship->getParams();
 
-        switch ($type) {
-            // Includes many nested
-            case self::INCLUDES_MANY: {
-                if (isset($this->properties[$property])) {
-                    // Data is present from initial resource call, simply bind it to the model
-                    $this->properties[$property] = self::buildResourceCollection($class, $this->properties[$property]);
-                } else {
-                    // No data is present, make an API call
-                    $this->properties[$property] = $this->includesMany($class, $params);
-                }
-                break;
+        if ($relationship instanceof IncludesMany) {
+            // Includes many nested resources
+            if (isset($this->properties[$property])) {
+                // Data is present from initial resource call, simply bind it to the model
+                $this->properties[$property] = self::buildResourceCollection($resource, $this->properties[$property]);
+            } else {
+                // No data is present, make an API call
+                $this->properties[$property] = $this->includesMany($resource, $params);
             }
-
+        } elseif ($relationship instanceof IncludesOne) {
             // Includes a single nested resource
-            case self::INCLUDES_ONE: {
-                if (isset($this->properties[$property])) {
-                    // Data is present from initial resource call, simply bind it to the model
-                    $this->properties[$property] = self::buildResource($class, $this->properties[$property]);
-                } else {
-                    // No data is present, make an API call
-                    $this->properties[$property] = $this->includesOne($class, $params, $linking);
-                }
-                break;
+            if (isset($this->properties[$property])) {
+                // Data is present from initial resource call, simply bind it to the model
+                $this->properties[$property] = self::buildResource($resource, $this->properties[$property]);
+            } else {
+                // No data is present, make an API call
+                $this->properties[$property] = $this->includesOne($resource, $params, $relationship->getForignKey());
             }
-
+        } elseif ($relationship instanceof HasMany) {
             // Has many resources through
-            case self::HAS_MANY: {
-                $this->properties[$property] = $this->hasMany($class, $params);
-                break;
-            }
-
+            $this->properties[$property] = $this->hasMany($resource, $params);
+        } elseif ($relationship instanceof HasOne) {
             // Has a single resource through
-            case self::HAS_ONE: {
-                $this->properties[$property] = $this->hasOne($class, $params);
-                break;
-            }
+            $this->properties[$property] = $this->hasOne($resource, $params);
         }
 
         return $this->properties[$property];
