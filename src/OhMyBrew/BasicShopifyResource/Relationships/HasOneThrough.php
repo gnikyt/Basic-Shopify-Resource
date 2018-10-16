@@ -2,14 +2,32 @@
 
 namespace OhMyBrew\BasicShopifyResource\Relationships;
 
+use Closure;
 use OhMyBrew\BasicShopifyResource\Relationships\Relationship;
 
 class HasOneThrough extends Relationship
 {
+    /**
+     * The through resource class.
+     *
+     * @var string
+     */
     protected $through;
 
-    protected $throughParams;
+    /**
+     * The through resource ID.
+     *
+     * @var Closure
+     */
+    protected $throughId;
 
+    /**
+     * Sets the through resource.
+     *
+     * @param string $through The through resource class.
+     *
+     * @return $this
+     */
     public function setThrough($through)
     {
         $this->through = $through;
@@ -17,25 +35,37 @@ class HasOneThrough extends Relationship
         return $this;
     }
 
+    /**
+     * Gets the through resource class.
+     *
+     * @return string
+     */
     public function getThrough()
     {
         return $this->through;
     }
 
-    public function setThroughParams($paramsCallable)
+    /**
+     * Sets the through resource ID.
+     *
+     * @param Closure $idCallable The callable closure.
+     *
+     * @return $this
+     */
+    public function setThroughId(Closure $idCallable)
     {
-        $this->throughParams = $paramsCallable;
+        $this->throughId = $idCallable;
 
         return $this;
     }
 
     /**
-     * Gets the additional parameters for the relationship.
+     * Gets the thorugh resource ID.
      *
-     * @return array
+     * @return int
      */
-    public function getThroughParams()
+    public function getThroughId()
     {
-        return is_callable($this->throughParams) ? call_user_func($this->throughParams) : [];
+        return call_user_func($this->throughId);
     }
 }

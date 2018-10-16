@@ -44,7 +44,7 @@ class Variant extends Resource
             }),
             'image'   => (new HasOneThrough(Image::class))
                 ->setThrough(Product::class)
-                ->setThroughParams(function () {
+                ->setThroughId(function () {
                     return $this->product_id;
                 })
         ];

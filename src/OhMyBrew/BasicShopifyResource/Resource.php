@@ -223,7 +223,7 @@ abstract class Resource
      * @param int   $resourceId The ID of the resource.
      * @param array $params     Additional param to pass with the request.
      *
-     * @return object
+     * @return Resource
      */
     public static function find($resourceId, array $params = [])
     {
@@ -238,7 +238,7 @@ abstract class Resource
      * @param object|string $throughResource The resource to loop through
      * @param array         $params          Additional param to pass with the request.
      *
-     * @return object
+     * @return Resource
      */
     public static function findThrough($resourceId, $throughResource, array $params = [])
     {
@@ -252,20 +252,20 @@ abstract class Resource
      *
      * @param string      $resource The class name of the resource.
      * @param array       $params   Additional param to pass with the request.
-     * @param string|null $key      The key to link.
      *
-     * @return object
+     * @return Resource
      */
-    public function includesOne($resource, array $params = [], $key = null)
+    public function includesOne($resource, array $params = [])
     {
         // Create an instance of the resource
         $instance = new $resource();
-        if (!$key) {
-            // If no key is entered, build an assumed one
-            $key = "{$instance->resourceName}_id";
+        $id = $instance->{$instance->resourceName_id};
+
+        if ($id === null) {
+            return null;
         }
 
-        return $instance::find($this->{$key}, $params);
+        return $instance::find($id, $params);
     }
 
     /**
@@ -308,7 +308,7 @@ abstract class Resource
      * @param string $resource The class name of the resource.
      * @param array  $params   Additional param to pass with the request.
      *
-     * @return object
+     * @return Resource
      */
     public function hasOne($resource, array $params)
     {
@@ -318,7 +318,18 @@ abstract class Resource
         return $instance::all($params)->first();
     }
 
-    public function hasOneThrough($resource, array $params = [], $throughResource, $throughParams)
+    /**
+     * Relationship of hasOneThrough.
+     * This resource has a single resource through another resource.
+     *
+     * @param string $resource        The class name of the resource.
+     * @param array  $params          Additional param to pass with the request.
+     * @param string $throughResource The through resource class.
+     * @param int    $throughId       Through resource ID.
+     *
+     * @return Resource
+     */
+    public function hasOneThrough($resource, array $params = [], $throughResource, $throughId)
     {
         $instance = new $resource();
         $throughInstance = new $throughResource();
@@ -328,7 +339,7 @@ abstract class Resource
             return null;
         }
 
-        return $instance::findThrough($id, $throughInstance::find($throughParams), $params);
+        return $instance::findThrough($id, $throughInstance::find($throughId), $params);
     }
 
     /**
@@ -512,7 +523,7 @@ abstract class Resource
                 $this->properties[$property] = self::buildResource($resource, $this->properties[$property]);
             } else {
                 // No data is present, make an API call
-                $this->properties[$property] = $this->includesOne($resource, $params, $relationship->getForignKey());
+                $this->properties[$property] = $this->includesOne($resource, $params);
             }
         } elseif ($relationship instanceof HasMany) {
             // Has many resources through
@@ -522,7 +533,7 @@ abstract class Resource
             $this->properties[$property] = $this->hasOne($resource, $params);
         } elseif ($relationship instanceof HasOneThrough) {
             // Has a single resource through
-            $this->properties[$property] = $this->hasOneThrough($resource, $params, $relationship->getThrough(), $relationship->getThroughParams());
+            $this->properties[$property] = $this->hasOneThrough($resource, $params, $relationship->getThrough(), $relationship->getThroughId());
         }
 
         return $this->properties[$property];
