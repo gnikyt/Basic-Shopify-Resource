@@ -12,24 +12,30 @@ This library is a simple wrapper for the Basic Shopify API to interact with the 
 ## Examples:
 
 ```php
+# Setting up a static connection
 Connection::set(
     true, // false for public API
     'example-shop.myshopify.com',
     ['key' => '9798928b7bac29a732e3c1f3646732df2', 'password' => 'dd69e76588e9008b0b8ae1dd7a7b7b59']
 );
+```
 
-$p = Product::find(1624265326631);
-echo "Product: {$p->title}";
-$p->title = 'New Title';
-$p->save();
+```php
+$product = Product::find(1624265326631);
+echo "Product: {$product->title}";
+$product->title = 'New Title';
+$product->save();
 
-echo $p->variants->first()->id; // Lazy loads the variants if not existing
-print_r($p->variants->first()->product); // Gets product for variant
-print_r($p->collections->first()->collects); // Gets collects for the collection
-print_r($p->collects); // Gets collects for the product
+echo $p->variants->first()->id;
+print_r($p->varianrs->first()->image->src); // Gets the variant image (lazy loaded)
+print_r($p->variants->first()->product); // Gets product for variant (lazy loaded)
+print_r($p->collections->first()->collects); // Gets collects for the collection (lazy loaded)
 
-echo Product::all()->count();
+$count = Product::all()->count();
+echo "There are {$count} products";
 
-$v = Variant::findThrough(12999209309, $p);
-echo $v->id;
+$variant = Variant::findThrough(12999209309, $product);
+echo $variant->id;
+
+$collection = CustomCollection::find(29889201111);
 ```
