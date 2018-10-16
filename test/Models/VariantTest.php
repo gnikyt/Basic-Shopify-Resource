@@ -43,7 +43,13 @@ class VariantTest extends TestCase
 
     public function testRelationships()
     {
-        $connection = $this->createConnection(['models/product', 'models/variant', 'models/products', 'models/images']);
+        $connection = $this->createConnection([
+            'models/product',
+            'models/variant',
+            'models/products',
+            'models/product',
+            'models/image',
+        ]);
         $product = $this->invokeMethod(Product::class, 'find', [632910392]);
         $variant = $this->invokeMethod(Variant::class, 'findThrough', [808950810, $product]);
 

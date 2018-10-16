@@ -15,11 +15,6 @@ use OhMyBrew\BasicShopifyResource\Relationships\HasOneThrough;
  */
 abstract class Resource
 {
-    const INCLUDES_ONE = 0;
-    const INCLUDES_MANY = 1;
-    const HAS_ONE = 3;
-    const HAS_MANY = 4;
-
     /**
      * The properties of the resource, such as ID, title, etc.
      *
