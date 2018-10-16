@@ -8,6 +8,7 @@ use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
 use OhMyBrew\BasicShopifyResource\Relationships\IncludesOne;
 use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
+use OhMyBrew\BasicShopifyResource\Relationships\HasOneThrough;
 
 /**
  * Resource class which all models are based on.
@@ -317,6 +318,19 @@ abstract class Resource
         return $instance::all($params)->first();
     }
 
+    public function hasOneThrough($resource, array $params = [], $throughResource, $throughParams)
+    {
+        $instance = new $resource();
+        $throughInstance = new $throughResource();
+        $id = $this->{"{$instance->resourceName}_id"};
+
+        if ($id === null) {
+            return null;
+        }
+
+        return $instance::findThrough($id, $throughInstance::find($throughParams), $params);
+    }
+
     /**
      * Saves (or creates) a record.
      *
@@ -506,6 +520,9 @@ abstract class Resource
         } elseif ($relationship instanceof HasOne) {
             // Has a single resource through
             $this->properties[$property] = $this->hasOne($resource, $params);
+        } elseif ($relationship instanceof HasOneThrough) {
+            // Has a single resource through
+            $this->properties[$property] = $this->hasOneThrough($resource, $params, $relationship->getThrough(), $relationship->getThroughParams());
         }
 
         return $this->properties[$property];
