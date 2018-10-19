@@ -2,8 +2,8 @@
 
 namespace OhMyBrew\BasicShopifyResource\Models;
 
-use OhMyBrew\BasicShopifyResource\Resource;
 use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
+use OhMyBrew\BasicShopifyResource\Resource;
 
 /**
  * Custom Collection API.

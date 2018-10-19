@@ -2,9 +2,9 @@
 
 namespace OhMyBrew\BasicShopifyResource\Models;
 
-use OhMyBrew\BasicShopifyResource\Resource;
-use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
 use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
+use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
+use OhMyBrew\BasicShopifyResource\Resource;
 
 /**
  * Product API.

@@ -2,10 +2,10 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test\Models;
 
-use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use OhMyBrew\BasicShopifyResource\Models\Collect;
 use OhMyBrew\BasicShopifyResource\Models\CustomCollection;
 use OhMyBrew\BasicShopifyResource\Models\Product;
+use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;
 
 class CollectTest extends TestCase

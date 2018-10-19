@@ -2,12 +2,12 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test;
 
-use ReflectionClass;
-use ReflectionProperty;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use OhMyBrew\BasicShopifyResource\Connection;
+use ReflectionClass;
+use ReflectionProperty;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {

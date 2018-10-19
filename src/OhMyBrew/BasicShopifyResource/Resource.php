@@ -3,12 +3,12 @@
 namespace OhMyBrew\BasicShopifyResource;
 
 use Exception;
-use Tightenco\Collect\Support\Collection;
-use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
-use OhMyBrew\BasicShopifyResource\Relationships\IncludesOne;
 use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOneThrough;
+use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
+use OhMyBrew\BasicShopifyResource\Relationships\IncludesOne;
+use Tightenco\Collect\Support\Collection;
 
 /**
  * Resource class which all models are based on.
@@ -218,7 +218,7 @@ abstract class Resource
      * @param int   $resourceId The ID of the resource.
      * @param array $params     Additional param to pass with the request.
      *
-     * @return Resource
+     * @return resource
      */
     public static function find($resourceId, array $params = [])
     {
@@ -233,7 +233,7 @@ abstract class Resource
      * @param object|string $throughResource The resource to loop through
      * @param array         $params          Additional param to pass with the request.
      *
-     * @return Resource
+     * @return resource
      */
     public static function findThrough($resourceId, $throughResource, array $params = [])
     {
@@ -245,10 +245,10 @@ abstract class Resource
      * Relationship of includesOne.
      * This resource includes a single nested resource.
      *
-     * @param string      $resource The class name of the resource.
-     * @param array       $params   Additional param to pass with the request.
+     * @param string $resource The class name of the resource.
+     * @param array  $params   Additional param to pass with the request.
      *
-     * @return Resource
+     * @return resource
      */
     public function includesOne($resource, array $params = [])
     {
@@ -257,7 +257,7 @@ abstract class Resource
         $id = $instance->{$instance->resourceName_id};
 
         if ($id === null) {
-            return null;
+            return;
         }
 
         return $instance::find($id, $params);
@@ -303,7 +303,7 @@ abstract class Resource
      * @param string $resource The class name of the resource.
      * @param array  $params   Additional param to pass with the request.
      *
-     * @return Resource
+     * @return resource
      */
     public function hasOne($resource, array $params)
     {
@@ -322,16 +322,16 @@ abstract class Resource
      * @param string $throughResource The through resource class.
      * @param int    $throughId       Through resource ID.
      *
-     * @return Resource
+     * @return resource
      */
-    public function hasOneThrough($resource, array $params = [], $throughResource, $throughId)
+    public function hasOneThrough($resource, array $params, $throughResource, $throughId)
     {
         $instance = new $resource();
         $throughInstance = new $throughResource();
         $id = $this->{"{$instance->resourceName}_id"};
 
         if ($id === null) {
-            return null;
+            return;
         }
 
         return $instance::findThrough($id, $throughInstance::find($throughId), $params);

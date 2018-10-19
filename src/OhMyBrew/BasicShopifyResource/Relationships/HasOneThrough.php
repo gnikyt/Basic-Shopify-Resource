@@ -3,7 +3,6 @@
 namespace OhMyBrew\BasicShopifyResource\Relationships;
 
 use Closure;
-use OhMyBrew\BasicShopifyResource\Relationships\Relationship;
 
 class HasOneThrough extends Relationship
 {
