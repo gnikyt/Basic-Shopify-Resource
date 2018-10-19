@@ -41,15 +41,30 @@ class Product extends Resource
     {
         $this->relationships = [
             'variants'    => new IncludesMany(Variant::class),
-            'images'      => (new IncludesMany(Image::class))->setParams(function () {
-                return ['product_id' => $this->id];
-            }),
-            'collections' => (new HasMany(CustomCollection::class))->setParams(function () {
-                return ['product_id' => $this->id];
-            }),
-            'collects'    => (new HasMany(Collect::class))->setParams(function () {
-                return ['product_id' => $this->id];
-            }),
+            'images'      => (new IncludesMany(Image::class))->setParams(
+                /**
+                 * @codeCoverageIgnore
+                 */
+                function () {
+                    return ['product_id' => $this->id];
+                }
+            ),
+            'collections' => (new HasMany(CustomCollection::class))->setParams(
+                /**
+                 * @codeCoverageIgnore
+                 */
+                function () {
+                    return ['product_id' => $this->id];
+                }
+            ),
+            'collects'    => (new HasMany(Collect::class))->setParams(
+                /**
+                 * @codeCoverageIgnore
+                 */
+                function () {
+                    return ['product_id' => $this->id];
+                }
+            ),
         ];
     }
 }

@@ -420,7 +420,20 @@ abstract class Resource
      */
     public function __set($property, $value)
     {
-        $this->mutatedProperties[$property] = $value;
+        $relationship = $this->getRelationalProperty($property);
+        if ($relationship) {
+            // Is relational property, magically work out
+            if (!$value instanceof self) {
+                // Bad value
+                throw new Exception('Setting relational property must be instance of a resource');
+            }
+
+            // Example, product_id => product[id] ... product_id => 1
+            $this->mutatedProperties["{$value->resourceName}_{$value->resourcePk}"] = $value->{$value->resourcePk};
+        } else {
+            // Standard setter
+            $this->mutatedProperties[$property] = $value;
+        }
     }
 
     /**

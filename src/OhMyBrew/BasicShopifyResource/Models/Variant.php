@@ -39,12 +39,21 @@ class Variant extends Resource
     public function __construct()
     {
         $this->relationships = [
-            'product' => (new HasOne(Product::class))->setParams(function () {
-                return ['product_id' => $this->product_id];
-            }),
+            'product' => (new HasOne(Product::class))->setParams(
+                /**
+                 * @codeCoverageIgnore
+                 */
+                function () {
+                    return ['product_id' => $this->product_id];
+                }
+            ),
             'image'   => (new HasOneThrough(Image::class))
                 ->setThrough(Product::class)
-                ->setThroughId(function () {
+                ->setThroughId(
+                   /**
+                    * @codeCoverageIgnore
+                    */
+                    function () {
                     return $this->product_id;
                 })
         ];

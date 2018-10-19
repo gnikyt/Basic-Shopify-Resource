@@ -7,7 +7,7 @@
 
 This library is a simple wrapper for the Basic Shopify API to interact with the Shopify resources in a more friendly manner.
 
-**THIS IS IN DEVELOPMENT** do not use, unit tests are on-going.
+**Currently in the works, many models are missing**
 
 ## Examples:
 
@@ -26,10 +26,10 @@ echo "Product: {$product->title}";
 $product->title = 'New Title';
 $product->save();
 
-echo $p->variants->first()->id;
-print_r($p->varianrs->first()->image->src); // Gets the variant image (lazy loaded)
-print_r($p->variants->first()->product); // Gets product for variant (lazy loaded)
-print_r($p->collections->first()->collects); // Gets collects for the collection (lazy loaded)
+echo $pproduct->variants->first()->id;
+print_r($pproduct->variants->first()->image->src); // Gets the variant image (lazy loaded)
+print_r($products->variants->first()->product); // Gets product for variant (lazy loaded)
+print_r($pproducts->collections->first()->collects); // Gets collects for the collection (lazy loaded)
 
 $count = Product::all()->count();
 echo "There are {$count} products";
@@ -38,4 +38,13 @@ $variant = Variant::findThrough(12999209309, $product);
 echo $variant->id;
 
 $collection = CustomCollection::find(29889201111);
+echo $collection->handle;
+
+$collect = Collect::all(['collection_id' => $collection->id]);
+$products = $collect->map(function ($c) { return $c->product; });
 ```
+
+## Testing
+
+Run `bin/phpunit --no-coverage` for tests.
+Run `bin/phpunit` for full coverage.

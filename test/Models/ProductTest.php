@@ -6,7 +6,7 @@ use OhMyBrew\BasicShopifyResource\Models\Product;
 use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;
 
-class ProducteTest extends TestCase
+class ProductTest extends TestCase
 {
     public function testSetup()
     {

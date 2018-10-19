@@ -39,9 +39,14 @@ class CustomCollection extends Resource
     public function __construct()
     {
         $this->relationships = [
-            'collects' => (new HasMany(Collect::class))->setParams(function () {
-                return ['collection_id' => $this->id];
-            }),
+            'collects' => (new HasMany(Collect::class))->setParams(
+                /**
+                 * @codeCoverageIgnore
+                 */
+                function () {
+                    return ['collection_id' => $this->id];
+                }
+            ),
         ];
     }
 }
