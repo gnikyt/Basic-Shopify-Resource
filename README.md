@@ -48,6 +48,11 @@ $products = $collect->map(function ($c) { return $c->product; });
 
 11.4% completed
 
+- [x] ProductImage
+- [x] ProductVariant
+- [x] CustomCollection
+- [x] Collect
+- [x] Product
 - [ ] AccessScope
 - [ ] StorefrontAccessToken
 - [ ] Policy
@@ -64,12 +69,7 @@ $products = $collect->map(function ($c) { return $c->product; });
 - [ ] Payouts
 - [ ] Balance
 - [ ] Transactions
-- [x] Collect
-- [x] Product
 - [ ] SmartCollection
-- [x] ProductImage
-- [x] ProductVariant
-- [x] CustomCollection
 - [ ] Webhook
 - [ ] Event
 - [ ] CustomerAddress
