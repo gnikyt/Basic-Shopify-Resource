@@ -4,7 +4,7 @@ namespace OhMyBrew\BasicShopifyResource\Test\Resource;
 
 use OhMyBrew\BasicShopifyAPI;
 use OhMyBrew\BasicShopifyResource\Models\Product;
-use OhMyBrew\BasicShopifyResource\Models\Variant;
+use OhMyBrew\BasicShopifyResource\Models\ProductVariant;
 use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use ReflectionClass;
 
@@ -61,7 +61,7 @@ class ResourceTest extends TestCase
         $this->assertEquals('IPod Nano - 8GB', $product->title);
 
         // Test setting a relational property
-        $variant = new Variant();
+        $variant = new ProductVariant();
 
         $this->assertNull($variant->product_id);
         $variant->product = $product;
@@ -73,7 +73,7 @@ class ResourceTest extends TestCase
      */
     public function testThrowsErrorTryingToSetInvalidRelational()
     {
-        $variant = new Variant();
+        $variant = new ProductVariant();
         $variant->product = 1;
     }
 

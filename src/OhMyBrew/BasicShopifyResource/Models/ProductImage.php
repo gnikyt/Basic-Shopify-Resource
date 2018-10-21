@@ -4,11 +4,12 @@ namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Models\Product;
 
 /**
- * Image API.
+ * ProductImage API.
  */
-class Image extends Resource
+class ProductImage extends Resource
 {
     /**
      * The resource path part.

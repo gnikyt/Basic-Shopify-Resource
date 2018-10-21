@@ -44,6 +44,69 @@ $collect = Collect::all(['collection_id' => $collection->id]);
 $products = $collect->map(function ($c) { return $c->product; });
 ```
 
+## Status
+
+11.4% completed
+
+- [ ] AccessScope
+- [ ] StorefrontAccessToken
+- [ ] Policy
+- [ ] ShippingZone
+- [ ] Province
+- [ ] Country
+- [ ] Shop
+- [ ] AbandonedCheckout
+- [ ] DraftOrder
+- [ ] Order
+- [ ] OrderRisk
+- [ ] Refund
+- [ ] Transaction
+- [ ] Payouts
+- [ ] Balance
+- [ ] Transactions
+- [x] Collect
+- [x] Product
+- [ ] SmartCollection
+- [x] ProductImage
+- [x] ProductVariant
+- [x] CustomCollection
+- [ ] Webhook
+- [ ] Event
+- [ ] CustomerAddress
+- [ ] Customer
+- [ ] CustomerSavedSearch
+- [ ] User
+- [ ] Multipass
+- [ ] GiftCard
+- [ ] ShopifyQL
+- [ ] Report
+- [ ] PriceRule
+- [ ] DiscountCode
+- [ ] Checkout
+- [ ] ResourceFeedback
+- [ ] ProductListing
+- [ ] CollectionListing
+- [ ] Payment
+- [ ] InventoryItem
+- [ ] Location
+- [ ] InventoryLevel
+- [ ] CarrierService
+- [ ] FulfillmentEvent
+- [ ] Fulfillment
+- [ ] FulfillmentService
+- [ ] Theme
+- [ ] Page
+- [ ] Comment
+- [ ] Asset
+- [ ] Blog
+- [ ] Redirect
+- [ ] ScriptTag
+- [ ] BlogArticle
+- [ ] UsageCharge
+- [ ] ApplicationCredit
+- [ ] ApplicationCharge
+- [ ] RecurringApplicationCharge
+
 ## Testing
 
 Run `bin/phpunit --no-coverage` for tests.

@@ -5,8 +5,13 @@ namespace OhMyBrew\BasicShopifyResource\Models;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOneThrough;
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Models\ProductImage;
+use OhMyBrew\BasicShopifyResource\Models\Product;
 
-class Variant extends Resource
+/**
+ * ProductVariant API.
+ */
+class ProductVariant extends Resource
 {
     /**
      * The resource path part.
@@ -45,7 +50,7 @@ class Variant extends Resource
                     return ['product_id' => $this->product_id];
                 }
             ),
-            'image'   => (new HasOneThrough(Image::class))
+            'image'   => (new HasOneThrough(ProductImage::class))
                 ->setThrough(Product::class)
                 ->setThroughId(
                     /**

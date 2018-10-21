@@ -3,7 +3,7 @@
 namespace OhMyBrew\BasicShopifyResource\Test\Resource;
 
 use OhMyBrew\BasicShopifyResource\Models\Product;
-use OhMyBrew\BasicShopifyResource\Models\Variant;
+use OhMyBrew\BasicShopifyResource\Models\ProductVariant;
 use OhMyBrew\BasicShopifyResource\Resource;
 use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;
@@ -29,16 +29,16 @@ class ResourceFindTest extends TestCase
 
         // Find through resource
         $connection = $this->createConnection(['base/variant_find_through', 'base/variant_find_through']);
-        $variant = $this->invokeMethod(Variant::class, 'findThrough', [808950810, $product]);
+        $variant = $this->invokeMethod(ProductVariant::class, 'findThrough', [808950810, $product]);
 
         $this->assertEquals(
             '/admin/products/632910392/variants/808950810.json',
             $this->getLastPathCalled($connection)
         );
-        $this->assertInstanceOf(Variant::class, $variant);
+        $this->assertInstanceOf(ProductVariant::class, $variant);
 
         // Find through string
-        $variant = $this->invokeMethod(Variant::class, 'findThrough', [808950810, 'products/632910392']);
+        $variant = $this->invokeMethod(ProductVariant::class, 'findThrough', [808950810, 'products/632910392']);
 
         $this->assertEquals(
             '/admin/products/632910392/variants/808950810.json',
@@ -62,7 +62,7 @@ class ResourceFindTest extends TestCase
     {
         $connection = $this->createConnection(['base/product_find', 'base/variant_all']);
         $product = $this->invokeMethod(Product::class, 'find', [632910392]);
-        $variants = $this->invokeMethod(Variant::class, 'allThrough', [$product]);
+        $variants = $this->invokeMethod(ProductVariant::class, 'allThrough', [$product]);
 
         $this->assertEquals(
             '/admin/products/632910392/variants.json',

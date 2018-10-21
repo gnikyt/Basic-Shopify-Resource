@@ -3,7 +3,7 @@
 namespace OhMyBrew\BasicShopifyResource\Test\Resource;
 
 use OhMyBrew\BasicShopifyResource\Models\Product;
-use OhMyBrew\BasicShopifyResource\Models\Variant;
+use OhMyBrew\BasicShopifyResource\Models\ProductVariant;
 use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;
 
@@ -54,7 +54,7 @@ class ResourceRelationsTest extends TestCase
     {
         // Product does not exist for variant in the response, so an API call should be made
         $connection = $this->createConnection(['base/variant_find', 'base/product_all']);
-        $variant = $this->invokeMethod(Variant::class, 'find', [908950810]);
+        $variant = $this->invokeMethod(ProductVariant::class, 'find', [908950810]);
 
         $this->assertInstanceOf(Product::class, $variant->product);
         $this->assertEquals(
