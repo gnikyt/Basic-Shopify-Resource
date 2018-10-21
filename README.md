@@ -26,15 +26,15 @@ echo "Product: {$product->title}";
 $product->title = 'New Title';
 $product->save();
 
-echo $pproduct->variants->first()->id;
+echo $product->variants->first()->id;
 print_r($pproduct->variants->first()->image->src); // Gets the variant image (lazy loaded)
-print_r($products->variants->first()->product); // Gets product for variant (lazy loaded)
-print_r($pproducts->collections->first()->collects); // Gets collects for the collection (lazy loaded)
+print_r($product->variants->first()->product); // Gets product for variant (lazy loaded)
+print_r($product->collections->first()->collects); // Gets collects for the collection (lazy loaded)
 
 $count = Product::all()->count();
 echo "There are {$count} products";
 
-$variant = Variant::findThrough(12999209309, $product);
+$variant = ProductVariant::findThrough(12999209309, $product);
 echo $variant->id;
 
 $collection = CustomCollection::find(29889201111);
@@ -110,4 +110,5 @@ $products = $collect->map(function ($c) { return $c->product; });
 ## Testing
 
 Run `bin/phpunit --no-coverage` for tests.
+
 Run `bin/phpunit` for full coverage.
