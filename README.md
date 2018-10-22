@@ -7,9 +7,9 @@
 
 This library is a simple wrapper for the Basic Shopify API to interact with the Shopify resources in a more friendly manner.
 
-**Currently in the works, many models are missing**
+**Currently in the works, many models are missing**.
 
-## Examples:
+## Examples
 
 ```php
 # Setting up a static connection
@@ -46,7 +46,7 @@ $products = $collect->map(function ($c) { return $c->product; });
 
 ## Status
 
-11.4% completed
+14.00% completed
 
 - [x] ProductImage
 - [x] ProductVariant
