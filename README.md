@@ -53,13 +53,15 @@ $products = $collect->map(function ($c) { return $c->product; });
 - [x] CustomCollection
 - [x] Collect
 - [x] Product
+- [x] Shop
+- [x] Asset
+- [x] Theme
 - [ ] AccessScope
 - [ ] StorefrontAccessToken
 - [ ] Policy
 - [ ] ShippingZone
 - [ ] Province
 - [ ] Country
-- [ ] Shop
 - [ ] AbandonedCheckout
 - [ ] DraftOrder
 - [ ] Order
@@ -94,10 +96,8 @@ $products = $collect->map(function ($c) { return $c->product; });
 - [ ] FulfillmentEvent
 - [ ] Fulfillment
 - [ ] FulfillmentService
-- [ ] Theme
 - [ ] Page
 - [ ] Comment
-- [ ] Asset
 - [ ] Blog
 - [ ] Redirect
 - [ ] ScriptTag

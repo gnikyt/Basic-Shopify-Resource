@@ -6,6 +6,7 @@ use Exception;
 use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOneThrough;
+use OhMyBrew\BasicShopifyResource\Relationships\HasManyThrough;
 use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
 use OhMyBrew\BasicShopifyResource\Relationships\IncludesOne;
 use Tightenco\Collect\Support\Collection;
@@ -122,7 +123,7 @@ abstract class Resource
         }
         $path[] = $resourcePath;
 
-        if ($resourceId) {
+        if ($resourceId && $resourceId > 0) {
             // Add the targeted resource ID
             $path[] = $resourceId;
         }
@@ -132,10 +133,10 @@ abstract class Resource
         $response = self::getConnection()
             ->rest($type, $path, $params)
             ->body
-            ->{$resourceId ? $resourceName : $resourceNamePlural};
+            ->{($resourceId || $resourceId === 0) ? $resourceName : $resourceNamePlural};
 
         if ($type !== 'DELETE') {
-            if ($resourceId) {
+            if ($resourceId || $resourceId === 0) {
                 // If singular, build a single model
                 return self::buildResource($resource, $response);
             }
@@ -335,6 +336,23 @@ abstract class Resource
         }
 
         return $instance::findThrough($id, $throughInstance::find($throughId), $params);
+    }
+
+    /**
+     * Relationship of hasManyThrough.
+     * This resource has many resources through another resource.
+     *
+     * @param string  $resource        The class name of the resource.
+     * @param array   $params          Additional param to pass with the request.
+     * @param Closure $throughResource The through resource.
+     *
+     * @return resource
+     */
+    public function hasManyThrough($resource, array $params, $throughResource)
+    {
+        $instance = new $resource();
+
+        return $instance::allThrough($throughResource(), $params);
     }
 
     /**
@@ -542,6 +560,9 @@ abstract class Resource
         } elseif ($relationship instanceof HasOneThrough) {
             // Has a single resource through
             $this->properties[$property] = $this->hasOneThrough($resource, $params, $relationship->getThrough(), $relationship->getThroughId());
+        } elseif ($relationship instanceof HasManyThrough) {
+            // Has a single resource through
+            $this->properties[$property] = $this->hasManyThrough($resource, $params, $relationship->getThrough());
         }
 
         return $this->properties[$property];
