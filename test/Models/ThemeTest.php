@@ -3,7 +3,6 @@
 namespace OhMyBrew\BasicShopifyResource\Test\Models;
 
 use OhMyBrew\BasicShopifyResource\Models\Theme;
-use OhMyBrew\BasicShopifyResource\Models\Asset;
 use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;
 

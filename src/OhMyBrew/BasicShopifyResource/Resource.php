@@ -4,9 +4,9 @@ namespace OhMyBrew\BasicShopifyResource;
 
 use Exception;
 use OhMyBrew\BasicShopifyResource\Relationships\HasMany;
+use OhMyBrew\BasicShopifyResource\Relationships\HasManyThrough;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOneThrough;
-use OhMyBrew\BasicShopifyResource\Relationships\HasManyThrough;
 use OhMyBrew\BasicShopifyResource\Relationships\IncludesMany;
 use OhMyBrew\BasicShopifyResource\Relationships\IncludesOne;
 use Tightenco\Collect\Support\Collection;

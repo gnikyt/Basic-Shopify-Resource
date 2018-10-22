@@ -2,12 +2,12 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test\Models;
 
-use OhMyBrew\BasicShopifyResource\Models\ProductImage;
 use OhMyBrew\BasicShopifyResource\Models\Product;
+use OhMyBrew\BasicShopifyResource\Models\ProductImage;
 use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;
 
-class ImageTest extends TestCase
+class ProductImageTest extends TestCase
 {
     public function testSetup()
     {

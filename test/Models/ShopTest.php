@@ -2,8 +2,8 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test\Models;
 
-use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use OhMyBrew\BasicShopifyResource\Models\Shop;
+use OhMyBrew\BasicShopifyResource\Test\TestCase;
 
 class ShopTest extends TestCase
 {

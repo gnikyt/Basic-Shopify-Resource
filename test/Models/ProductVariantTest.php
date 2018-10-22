@@ -2,8 +2,8 @@
 
 namespace OhMyBrew\BasicShopifyResource\Test\Models;
 
-use OhMyBrew\BasicShopifyResource\Models\ProductImage;
 use OhMyBrew\BasicShopifyResource\Models\Product;
+use OhMyBrew\BasicShopifyResource\Models\ProductImage;
 use OhMyBrew\BasicShopifyResource\Models\ProductVariant;
 use OhMyBrew\BasicShopifyResource\Test\TestCase;
 use Tightenco\Collect\Support\Collection;

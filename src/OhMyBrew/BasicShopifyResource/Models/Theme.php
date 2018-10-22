@@ -2,8 +2,8 @@
 
 namespace OhMyBrew\BasicShopifyResource\Models;
 
-use OhMyBrew\BasicShopifyResource\Resource;
 use OhMyBrew\BasicShopifyResource\Relationships\HasManyThrough;
+use OhMyBrew\BasicShopifyResource\Resource;
 
 /**
  * Theme API.
@@ -31,7 +31,6 @@ class Theme extends Resource
      */
     protected $resourceNamePlural = 'themes';
 
-
     /**
      * The constructor.
      *
@@ -41,12 +40,12 @@ class Theme extends Resource
     {
         $this->relationships = [
             'assets'   => (new HasManyThrough(Asset::class))
-                /**
+                /*
                  * @codeCoverageIgnore
                  */
                 ->setThrough(function () {
                     return $this;
-                })
+                }),
         ];
     }
 }
