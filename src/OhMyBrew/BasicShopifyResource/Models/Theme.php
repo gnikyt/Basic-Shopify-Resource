@@ -4,6 +4,7 @@ namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Relationships\HasManyThrough;
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Models\Asset;
 
 /**
  * Theme API.

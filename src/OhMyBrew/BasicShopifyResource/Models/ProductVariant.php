@@ -5,6 +5,8 @@ namespace OhMyBrew\BasicShopifyResource\Models;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 use OhMyBrew\BasicShopifyResource\Relationships\HasOneThrough;
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Models\Product;
+use OhMyBrew\BasicShopifyResource\Models\ProductImage;
 
 /**
  * ProductVariant API.

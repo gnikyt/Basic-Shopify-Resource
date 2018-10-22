@@ -4,6 +4,7 @@ namespace OhMyBrew\BasicShopifyResource\Models;
 
 use OhMyBrew\BasicShopifyResource\Relationships\HasOne;
 use OhMyBrew\BasicShopifyResource\Resource;
+use OhMyBrew\BasicShopifyResource\Models\Theme;
 
 /**
  * Asset API.
@@ -39,14 +40,7 @@ class Asset extends Resource
     public function __construct()
     {
         $this->relationships = [
-            'theme' => (new HasOne(Theme::class))->setParams(
-                /**
-                 * @codeCoverageIgnore
-                 */
-                function () {
-                    return ['theme_id' => $this->theme_id];
-                }
-            ),
+            'theme' => new HasOne(Theme::class),
         ];
     }
 }
